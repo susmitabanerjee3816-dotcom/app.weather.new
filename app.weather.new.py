@@ -3,7 +3,7 @@ import requests
 
 st.title("🌤️ Weather App")
 
-API_KEY = st.secrets("OpenWeather_API_KEY")
+API_KEY = st.secrets["OpenWeather_API_KEY"]
 
 city = st.text_input("Enter City Name:")
 
