@@ -1,28 +1,29 @@
 import streamlit as st
-from google import genai
 import requests
 
-API_KEY = "9b60f1d9eb5efb0b40963069fb2f23ca"
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
+st.title("🌤️ Weather App")
 
+API_KEY = "OpenWeather_API_KEY"
 
-#city Input
-city = st.text_input("Please Enter City Name ")
+city = st.text_input("Enter City Name:")
 
-if st.button("Get Weather Details"):
-      if city:
-        params = {
-            "q": city,
-            "appid": API_KEY,
-            "units": "metric"
-        }
-
-        response = requests.get(BASE_URL, params=params)
+if st.button("Get Weather"):
+    if city:
+        url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
+        response = requests.get(url)
         data = response.json()
 
         if response.status_code == 200:
-            st.success("Weather Found")
+            temp = data['main']['temp']
+            condition = data['weather'][0]['description']
+            humidity = data['main']['humidity']
+
+            st.write("---")
+            st.subheader(f"Weather in {city}")
+            st.success(f"🌡️ Temperature: {temp}°C")
+            st.info(f"🌥️ Condition: {condition}")
+            st.info(f"💧 Humidity: {humidity}%")
         else:
-            st.error(data.get("message", "Unknown error"))
-else:
-        st.warning("Please enter a city name")
+            st.error("City not found!")
+    else:
+        st.error("Please enter a city name first!")
